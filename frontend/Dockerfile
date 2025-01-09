@@ -1,5 +1,5 @@
 # Specify the base image (Node.js in this case, using the lightweight Alpine version)
-FROM node:16-alpine
+FROM node:16 AS build
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -12,9 +12,11 @@ RUN npm install
 
 # Copy the rest of the application code to the container
 COPY . .
+# run build
+RUN npm run build
 
-# Expose the port used by the React development server
-EXPOSE 5000
-
-# Define the command to start the React development server
-CMD ["npm", "start"]
+# Production Stage
+FROM nginx:stable-alpine
+COPY --from=build /app/build /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
