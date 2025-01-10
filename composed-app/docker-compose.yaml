@@ -4,7 +4,7 @@ services:
     networks:
       - shopnet
     ports:
-      - "5000:5000"  # Exposes Flask app on port 5000
+      - "5000:80"  # Exposes Flask app on port 5000
     environment:
       SPRING_BOOT_API_URL: http://backendspringboot:8080/api/shoppingItems
     depends_on:
